@@ -16,9 +16,10 @@ function parseVariable(input) {
   return match ? match[1] : undefined;
 }
 
+const vars = {};
+
 function App() {
   const [markdown, setMarkdown] = useState("");
-  const vars = {};
 
   const walkTokens = (token) => {
     if (token.type === 'code') {
