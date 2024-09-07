@@ -18,13 +18,11 @@ function parseVariable(input) {
 
 function App() {
   const [markdown, setMarkdown] = useState("");
-  const [vars, setVars] = useState({})
+  const vars = {};
 
-  console.log(vars);
-
-  const renderer = {
-    code({ text, lang }) {
-      
+  const walkTokens = (token) => {
+    if (token.type === 'code') {
+      const { text, lang } = token
       if (lang !== undefined) {
         const variable = parseVariable(lang)
 
@@ -33,23 +31,21 @@ function App() {
 
           if (value !== undefined && vars[variable] !== value && value !== "") {
             console.log("setting variable", variable, "to", value)
-            setVars({ ...vars, [variable]: value })
+            vars[variable] = value
           }
         }
       }
 
-      // if text contains $variable then replace it with the value of the variable
       if (text.includes("$")) {
         const regex = /\$([a-zA-Z_][a-zA-Z0-9_]*)/g;
         const matches = [...text.matchAll(regex)];
         for (const match of matches) {
           const variable = match[1];
           if (vars[variable] !== undefined) {
-            text = text.replace(match[0], vars[variable]);
+            token.text = text.replace(match[0], vars[variable]);
           }
         }
       }
-      return text;
     }
   };
 
@@ -61,8 +57,8 @@ function App() {
       return hljs.highlight(validLanguage, code).value;
     },
   });
-
-  marked.use({ renderer });
+  
+  marked.use({ walkTokens });
 
   const convertToHTML = (md) => {
     return marked(md);
