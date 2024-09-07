@@ -30,7 +30,7 @@ function App() {
           const value = text
 
           if (value !== undefined && vars[variable] !== value && value !== "") {
-            console.log("setting variable", variable, "to", value)
+            // console.log("setting variable", variable, "to", value)
             vars[variable] = value
           }
         }
