@@ -65,6 +65,45 @@ function App() {
     return marked(md);
   };
 
+  useEffect(() => {
+    const codeBlocks = document.querySelectorAll("pre");
+  
+    codeBlocks.forEach((block) => {
+      // Check if block already contains the copy prompt to avoid duplications
+      if (block.querySelector(".copy-prompt")) return;
+  
+      // Create the copy prompt element
+      const copyPrompt = document.createElement("div");
+      copyPrompt.className = "copy-prompt";
+  
+      // Create the copy icon element
+      const copyIcon = document.createElement("img");
+      copyIcon.src = "copy.svg";
+      copyIcon.alt = "Copy code"; // Accessibility improvement
+      copyIcon.style.height = "20px";
+      copyIcon.style.width = "20px";
+  
+      copyPrompt.appendChild(copyIcon);
+      block.appendChild(copyPrompt);
+  
+      // Add click event listener to copy code to clipboard
+      copyPrompt.addEventListener("click", () => {
+        const codeText = block.querySelector("code")?.textContent || ""; // Safely get code text
+        navigator.clipboard.writeText(codeText).then(() => {
+          copyPrompt.textContent = "Copied!"; // Update the text to indicate the copy action
+          setTimeout(() => {
+            copyPrompt.textContent = ""; // Reset the text
+            copyPrompt.appendChild(copyIcon); // Reattach the icon
+          }, 1000);
+        }).catch(() => {
+          copyPrompt.textContent = "Failed to copy"; // Error handling
+          setTimeout(() => copyPrompt.textContent = "", 1000);
+        });
+      });
+    });
+  }, [markdown]);
+  
+
   return (
     <div className="app">
       <div className="editor-pane">

@@ -27,13 +27,39 @@
 
 .preview-content pre {
   background-color: #f0f0f0;
-  padding: 10px;
+  padding: 2px;
   border-radius: 5px;
   overflow: auto;
+  display: flex;
+  justify-content: space-between;
 }
 
 .preview-content code {
   background-color: #f0f0f0;
   padding: 2px 4px;
   border-radius: 3px;
+}
+
+.copy-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.copy-prompt {
+  position: relative;
+  display: inline-flex; /* Ensures the prompt wraps the icon closely */
+  align-items: center;
+  cursor: pointer; /* Makes the element indicate it's clickable */
+  padding: 5px; /* Increases the click area around the icon */
+  border-radius: 4px; /* Optional: Adds a small radius for visual appeal */
+  transition: background-color 0.3s; /* Smooth hover effect */
+}
+
+.copy-prompt:hover {
+  background-color: #f0f0f0; /* Changes background on hover to indicate interactivity */
+}
+
+.copy-prompt img {
+  pointer-events: none; /* Ensures clicks are registered on the .copy-prompt div, not the image */
+  user-select: none; /* Prevents the image from being selected */
 }
