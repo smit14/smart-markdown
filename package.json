@@ -19,7 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "upload": "aws --profile 273683019430-profile s3 sync build s3://smart-markdown",
-    "invalidate": "aws --profile 273683019430 cloudfront create-invalidation --distribution-id E22ZC5Y2CENWH0 --paths '/*'",
+    "invalidate": "aws --profile 273683019430-profile cloudfront create-invalidation --distribution-id E22ZC5Y2CENWH0 --paths '/*'",
     "release": "npm run build; npm run upload; npm run invalidate"
   },
   "eslintConfig": {
