@@ -6,7 +6,6 @@
 .editor-pane, .preview-pane {
   flex: 1;
   padding: 20px;
-  overflow: hidden;
   word-break: break-word;
   box-sizing: border-box;
 }
@@ -22,6 +21,7 @@
 .preview-pane {
   background-color: #f7f7f7;
   padding: 20px;
+  overflow: auto;
 }
 
 .preview-content {
