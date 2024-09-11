@@ -16,6 +16,16 @@ function parseVariable(input) {
   return match ? match[1] : undefined;
 }
 
+function processAllTokens(tokens) {
+  for (const token of tokens) {
+    if (token.type === 'heading' && token.depth === 1) {
+      document.title = token.text
+      break
+    }
+  }
+  return tokens;
+}
+
 const vars = {};
 
 function App() {
@@ -60,6 +70,7 @@ function App() {
   });
   
   marked.use({ walkTokens });
+  marked.use({ hooks: { processAllTokens }})
 
   const convertToHTML = (md) => {
     return marked(md);
