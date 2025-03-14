@@ -127,7 +127,7 @@ function App() {
   
       // Add click event listener to copy code to clipboard
       copyPrompt.addEventListener("click", () => {
-        const codeText = block.querySelector("code")?.textContent || ""; // Safely get code text
+        const codeText = block.querySelector("code")?.textContent?.trim() || ""; // Trim whitespace and newlines
         navigator.clipboard.writeText(codeText).then(() => {
           copyPrompt.textContent = "Copied!"; // Update the text to indicate the copy action
           setTimeout(() => {
