@@ -30,6 +30,34 @@ const vars = {};
 
 function App() {
   const [markdown, setMarkdown] = useState("");
+  const [shareUrl, setShareUrl] = useState("");
+  const [shareButtonText, setShareButtonText] = useState("Share");
+
+  useEffect(() => {
+    // Check for content in URL parameters when component mounts
+    const urlParams = new URLSearchParams(window.location.search);
+    const content = urlParams.get('content');
+    if (content) {
+      setMarkdown(decodeURIComponent(atob(content)));
+    }
+  }, []);
+
+  const generateShareableLink = () => {
+    const encodedContent = btoa(encodeURIComponent(markdown));
+    const url = `${window.location.origin}${window.location.pathname}?content=${encodedContent}`;
+    setShareUrl(url);
+    navigator.clipboard.writeText(url).then(() => {
+      setShareButtonText("Copied!");
+      setTimeout(() => {
+        setShareButtonText("Share");
+      }, 2000);
+    }).catch(() => {
+      setShareButtonText("Failed!");
+      setTimeout(() => {
+        setShareButtonText("Share");
+      }, 2000);
+    });
+  };
 
   const walkTokens = (token) => {
     if (token.type === 'code') {
@@ -129,6 +157,14 @@ function App() {
           className="preview-content"
           dangerouslySetInnerHTML={{ __html: convertToHTML(markdown) }}
         />
+      </div>
+      <div className="share-container">
+        <button 
+          onClick={generateShareableLink}
+          className={`share-button ${shareButtonText !== "Share" ? "share-button-copied" : ""}`}
+        >
+          {shareButtonText}
+        </button>
       </div>
     </div>
   );

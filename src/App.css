@@ -1,6 +1,7 @@
 .app {
   display: flex;
   height: 100vh;
+  position: relative;
 }
 
 .editor-pane, .preview-pane {
@@ -24,8 +25,15 @@
   overflow: auto;
 }
 
-.preview-content {
-  white-space: pre-wrap; /* For preserving spacing */
+/* Remove default margins from all elements in preview */
+.preview-content > * {
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+/* Remove margin from last child to avoid extra space at the bottom */
+.preview-content > *:last-child {
+  margin-bottom: 0;
 }
 
 .preview-content pre {
@@ -43,6 +51,28 @@
   padding: 5px 4px;
   border-radius: 3px;
   overflow: auto;
+}
+
+/* Adjust heading margins */
+.preview-content h1,
+.preview-content h2,
+.preview-content h3,
+.preview-content h4,
+.preview-content h5,
+.preview-content h6 {
+  margin: 0.5em 0;
+}
+
+/* Adjust paragraph margins */
+.preview-content p {
+  margin: 0.5em 0;
+}
+
+/* Adjust list margins */
+.preview-content ul,
+.preview-content ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
 }
 
 .copy-icon {
@@ -67,4 +97,86 @@
 .copy-prompt img {
   pointer-events: none; /* Ensures clicks are registered on the .copy-prompt div, not the image */
   user-select: none; /* Prevents the image from being selected */
+}
+
+.editor-toolbar {
+  display: none;
+}
+
+/* New floating share container styles */
+.share-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.share-button {
+  padding: 12px 24px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 100px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.share-button:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+.share-button-copied {
+  background-color: #4caf50;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  transform: scale(1.05);
+}
+
+.share-button-copied:hover {
+  background-color: #4caf50;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* When the text is "Failed to copy" */
+.share-button-copied[disabled] {
+  background-color: #f44336;
+  box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
+.share-url {
+  background: white;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.share-url input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.share-url input:hover {
+  border-color: #2196f3;
+}
+
+.share-url input:focus {
+  outline: none;
+  border-color: #2196f3;
+  background-color: white;
 }
