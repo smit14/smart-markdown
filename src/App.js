@@ -19,8 +19,8 @@ function parseVariable(input) {
 function processAllTokens(tokens) {
   for (const token of tokens) {
     if (token.type === 'heading' && token.depth === 1) {
-      document.title = token.text
-      break
+      document.title = token.text;
+      break;
     }
   }
   return tokens;
@@ -32,6 +32,7 @@ function App() {
   const [markdown, setMarkdown] = useState("");
   const [shareUrl, setShareUrl] = useState("");
   const [shareButtonText, setShareButtonText] = useState("Share");
+  const [collapsedSections, setCollapsedSections] = useState(new Set());
 
   useEffect(() => {
     // Check for content in URL parameters when component mounts
@@ -142,6 +143,82 @@ function App() {
     });
   }, [markdown]);
   
+  useEffect(() => {
+    // Add collapsible functionality to headings
+    const headings = document.querySelectorAll('.preview-content h1, .preview-content h2, .preview-content h3, .preview-content h4, .preview-content h5, .preview-content h6');
+    
+    const clickHandlers = new Map();
+    
+    headings.forEach((heading) => {
+      // Remove any existing chevron
+      const existingChevron = heading.querySelector('.section-chevron');
+      if (existingChevron) {
+        existingChevron.remove();
+      }
+
+      // Add cursor pointer and chevron icon
+      heading.style.cursor = 'pointer';
+      const chevron = document.createElement('span');
+      chevron.className = 'section-chevron';
+      const sectionId = heading.getAttribute('id');
+      chevron.innerHTML = collapsedSections.has(sectionId) ? '▶' : '▼';
+      heading.appendChild(chevron);
+
+      // Create click handler
+      const clickHandler = () => {
+        const headingLevel = parseInt(heading.tagName[1]);
+        const isCollapsed = collapsedSections.has(sectionId);
+        
+        // Find all elements until next heading of same or higher level
+        let currentElement = heading.nextElementSibling;
+        const elementsToToggle = [];
+        
+        while (currentElement) {
+          if (currentElement.tagName.startsWith('H')) {
+            const nextHeadingLevel = parseInt(currentElement.tagName[1]);
+            if (nextHeadingLevel <= headingLevel) {
+              break;
+            }
+          }
+          // Skip the copy button element
+          if (!currentElement.classList.contains('copy-prompt')) {
+            elementsToToggle.push(currentElement);
+          }
+          currentElement = currentElement.nextElementSibling;
+        }
+
+        // Toggle visibility of all elements in the section
+        elementsToToggle.forEach(element => {
+          element.style.display = isCollapsed ? 'block' : 'none';
+        });
+        
+        // Update collapsed sections state
+        const newCollapsedSections = new Set(collapsedSections);
+        if (isCollapsed) {
+          newCollapsedSections.delete(sectionId);
+        } else {
+          newCollapsedSections.add(sectionId);
+        }
+        setCollapsedSections(newCollapsedSections);
+      };
+
+      // Store the handler for cleanup
+      clickHandlers.set(heading, clickHandler);
+      
+      // Add click handler
+      heading.addEventListener('click', clickHandler);
+    });
+
+    // Cleanup function
+    return () => {
+      headings.forEach((heading) => {
+        const handler = clickHandlers.get(heading);
+        if (handler) {
+          heading.removeEventListener('click', handler);
+        }
+      });
+    };
+  }, [markdown, collapsedSections]);
 
   return (
     <div className="app">

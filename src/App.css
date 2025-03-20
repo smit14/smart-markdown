@@ -61,6 +61,48 @@
 .preview-content h5,
 .preview-content h6 {
   margin: 0.5em 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.preview-content h1:hover,
+.preview-content h2:hover,
+.preview-content h3:hover,
+.preview-content h4:hover,
+.preview-content h5:hover,
+.preview-content h6:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.section-chevron {
+  font-size: 0.8em;
+  color: #666;
+  transition: transform 0.2s ease;
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+
+.preview-content h1 .section-chevron,
+.preview-content h2 .section-chevron,
+.preview-content h3 .section-chevron,
+.preview-content h4 .section-chevron,
+.preview-content h5 .section-chevron,
+.preview-content h6 .section-chevron {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.preview-content h1:hover .section-chevron,
+.preview-content h2:hover .section-chevron,
+.preview-content h3:hover .section-chevron,
+.preview-content h4:hover .section-chevron,
+.preview-content h5:hover .section-chevron,
+.preview-content h6:hover .section-chevron {
+  opacity: 1;
 }
 
 /* Adjust paragraph margins */
